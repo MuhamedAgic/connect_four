@@ -34,15 +34,25 @@ mod utils_tests {
 
     #[test]
     fn cli_confirms_positive_test() {
-        let input = b"y\n";
-        let result = cli_confirms(Cursor::new(&input[..]));
-        assert_eq!(result, true);
+        let input_y = b"y\n";
+        let result_y = cli_confirms(Cursor::new(&input_y[..]));
+
+        let input_yes = b"yes\n";
+        let result_yes = cli_confirms(Cursor::new(&input_yes[..]));
+        
+        assert_eq!(result_y, true);
+        assert_eq!(result_yes, true);
     }
 
     #[test]
     fn cli_confirms_negative_test() {
-        let input = b"n\n";
-        let result = cli_confirms(Cursor::new(&input[..]));
-        assert_eq!(result, false);
+        let input_n = b"n\n";
+        let result_n = cli_confirms(Cursor::new(&input_n[..]));
+        
+        let input_no = b"no\n";
+        let result_no = cli_confirms(Cursor::new(&input_no[..]));
+        
+        assert_eq!(result_n, false);
+        assert_eq!(result_no, false);
     }
 }

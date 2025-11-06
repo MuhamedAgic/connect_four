@@ -6,7 +6,7 @@ use crate::player::PlayerType;
 const ROWS: u8 = 6;
 const COLS: u8 = 7;
 
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq)]
 pub struct Board {
     pub data: [[Player; COLS as usize]; ROWS as usize],
 }
@@ -68,10 +68,7 @@ impl Board {
             .for_each(|row| row
                 .iter_mut()
                 .for_each(|player| {
-                    player.id = 0;
-                    player.name = "";
-                    player.marker = ' ';
-                    player.player_type = PlayerType::COMPUTER;
+                    *player = Player::default();
                 })
             );
     }
@@ -221,5 +218,12 @@ mod board_tests {
         assert_eq!(b.is_column_full(0), true);
     }
 
+
+    #[test]
+    fn clear_board_test() {
+        let mut board = Board::generate_full_board();
+        board.clear();
+        assert_eq!(board, Board::new());
+    }
 
 }

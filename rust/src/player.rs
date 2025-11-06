@@ -117,5 +117,12 @@ mod player_tests {
         let result = p.cli_ask_desired_move(Cursor::new(&input[..]), &b);
         assert_eq!(result, Ok(1));
     }
-    
+
+    #[test]
+    fn cannot_generate_move_on_full_board() {
+        let b = Board::generate_full_board();
+        let mut p = Player::default();
+        let result = p.generate_move(&b);
+        assert_eq!(result, Err(String::from("No available columns")));
+    }
 }

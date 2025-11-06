@@ -131,8 +131,8 @@ mod win_condition_strategy_tests {
         let mut p = Player::default();
         p.marker = 'x';
         let b = Board::generate_vertical_win(&p, 4);
-        let horizontal_strategy = WinConditionStrategy::VerticalWinStrategy;
-        assert_eq!(horizontal_strategy.has_won(&p, &b), true);
+        let vertical_strategy = WinConditionStrategy::VerticalWinStrategy;
+        assert_eq!(vertical_strategy.has_won(&p, &b), true);
     }
 
     #[test]
