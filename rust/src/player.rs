@@ -36,8 +36,8 @@ impl Player {
         }
     }
 
-    pub fn cli_ask_desired_move(&self, board: &Board) -> Result<u8, String> {
-        let mut reader = std::io::stdin().lock();
+    pub fn cli_ask_desired_move<R>(&self, mut reader: R, board: &Board) -> Result<u8, String>
+    where R: std::io::BufRead {
         let input = get_cli_input(&mut reader)
             .trim()
             .parse::<u8>()
@@ -49,12 +49,12 @@ impl Player {
                     Ok(value)
                 } else {
                     println!("Invalid column {}. Please choose another column", value);
-                    self.cli_ask_desired_move(board)
+                    self.cli_ask_desired_move(reader, board)
                 }
             },
             Err(e) => {
                 println!("Error while receiving input: {}", e);
-                self.cli_ask_desired_move(board)
+                self.cli_ask_desired_move(reader, board)
             }
         }
     }
@@ -77,7 +77,10 @@ impl Player {
     pub fn get_move(&self, board: &Board) -> Result<u8, String> {
         println!("What move would you like to play?");
         match self.player_type {
-            PlayerType::HUMAN => self.cli_ask_desired_move(board),
+            PlayerType::HUMAN => {
+                let mut reader = std::io::stdin().lock();
+                self.cli_ask_desired_move(reader, board)
+            },
             PlayerType::COMPUTER => self.generate_move(board),
             _ => Err(format!("Unknown player type: {:?}", self.player_type))
         }
@@ -94,6 +97,7 @@ impl fmt::Display for Player {
 
 #[cfg(test)]
 mod player_tests {
+    use std::io::Cursor;
     use super::*;
     
     #[test]
@@ -102,6 +106,16 @@ mod player_tests {
         let mut p = Player::default();
         p.marker = 'x';
         assert_eq!(b.apply_gravity(b.get_cols()), None);
+    }
+
+    #[test]
+    fn test_cli_ask_desired_move() {
+        let b = Board::new();
+        let mut p = Player::default();
+
+        let input = b"1\n";
+        let result = p.cli_ask_desired_move(Cursor::new(&input[..]), &b);
+        assert_eq!(result, Ok(1));
     }
     
 }
