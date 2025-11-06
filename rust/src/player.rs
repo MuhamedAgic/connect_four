@@ -37,7 +37,8 @@ impl Player {
     }
 
     pub fn cli_ask_desired_move(&self, board: &Board) -> Result<u8, String> {
-        let input = get_cli_input()
+        let mut reader = std::io::stdin().lock();
+        let input = get_cli_input(&mut reader)
             .trim()
             .parse::<u8>()
             .map_err(|e| e.to_string());

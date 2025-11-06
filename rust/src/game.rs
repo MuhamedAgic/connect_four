@@ -122,7 +122,8 @@ impl Game {
             
             if game_over {
                 print!("\nDo you wish to start a new game? y/n: ");
-                if cli_confirms() {
+                let mut reader = std::io::stdin().lock();
+                if cli_confirms(&mut reader) {
                     return Ok(TurnOutcome::NewGame);
                 } else {
                     return Ok(TurnOutcome::ExitGame);
