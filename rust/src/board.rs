@@ -73,8 +73,8 @@ impl Board {
             );
     }
 
-    pub fn get_rows(&self) -> u8 { ROWS }
-    pub fn get_cols(&self) -> u8 { COLS }
+    pub fn row_count(&self) -> u8 { ROWS }
+    pub fn col_count(&self) -> u8 { COLS }
     
     pub fn generate_full_board() -> Board {
         let mut b = Board::new();
@@ -120,7 +120,7 @@ impl Board {
     pub fn generate_vertical_win(player: &Player, nr_connected_components: u8) -> Board {
         let mut b = Board::new();
         for i in 0..nr_connected_components {
-            b.data[i as usize][COLS as usize - 1] = *player;
+            b.data[i as usize][0] = *player;
         }
         println!("Generated vertically won board");
         println!("{}", b);
@@ -188,14 +188,14 @@ mod board_tests {
     fn gravity_works() {
         let mut b = Board::new();
         println!("{}", b);
-        assert_eq!(b.apply_gravity(0), Some(b.get_rows() - 1)); // on empty board, expect to fall all the way down
+        assert_eq!(b.apply_gravity(0), Some(b.row_count() - 1)); // on empty board, expect to fall all the way down
         
         let mut p = Player::default();
         p.marker = 'x';
         b.data[ROWS as usize - 1][0] = p; // hardcode player p in first column
         println!("{}", b);
         
-        assert_eq!(b.apply_gravity(0), Some(b.get_rows() - 2)); // now expect it to be one higher
+        assert_eq!(b.apply_gravity(0), Some(b.row_count() - 2)); // now expect it to be one higher
     }
 
     #[test]
@@ -211,7 +211,7 @@ mod board_tests {
         p1.marker = 'x';
 
         // fill column 0 with players
-        for i in 0..b.get_rows() {
+        for i in 0..b.row_count() {
             b.data[i as usize][0] = p1;
         }
         

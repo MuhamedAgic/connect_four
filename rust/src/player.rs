@@ -105,7 +105,7 @@ mod player_tests {
         let mut b = Board::generate_full_board();
         let mut p = Player::default();
         p.marker = 'x';
-        assert_eq!(b.apply_gravity(b.get_cols()), None);
+        assert_eq!(b.apply_gravity(b.col_count()), None);
     }
 
     #[test]

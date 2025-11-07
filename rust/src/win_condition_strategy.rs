@@ -45,11 +45,11 @@ fn has_won_horizontally(player: &Player, board: &Board) -> bool {
 
 
 fn has_won_vertically(player: &Player, board: &Board) -> bool {
-    for col in 0..board.get_cols() {
+    for col in 0..board.col_count() {
         let mut current_count = 0;
         let mut max_count = 0;
 
-        for row in 0..board.get_rows() {
+        for row in 0..board.row_count() {
             if board.data[row as usize][col as usize] == *player {
                 current_count += 1;
                 max_count = std::cmp::max(max_count, current_count);
@@ -66,8 +66,8 @@ fn has_won_vertically(player: &Player, board: &Board) -> bool {
 
 
 fn has_won_north_east(player: &Player, board: &Board) -> bool {
-    let rows = board.get_rows();
-    let cols = board.get_cols();
+    let rows = board.row_count();
+    let cols = board.col_count();
     for row in (CONNECTED_COMPONENTS_WIN_THRESHOLD-1)..rows {
         for col in 0..=cols-CONNECTED_COMPONENTS_WIN_THRESHOLD {
             let mut count = 0;
@@ -89,8 +89,8 @@ fn has_won_north_east(player: &Player, board: &Board) -> bool {
 
 
 fn has_won_south_east(player: &Player, board: &Board) -> bool {
-    let rows = board.get_rows();
-    let cols = board.get_cols();
+    let rows = board.row_count();
+    let cols = board.col_count();
     for row in 0..=rows-CONNECTED_COMPONENTS_WIN_THRESHOLD {
         for col in 0..=cols-CONNECTED_COMPONENTS_WIN_THRESHOLD {
             let mut count = 0;
