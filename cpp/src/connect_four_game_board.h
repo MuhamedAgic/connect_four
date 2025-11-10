@@ -4,6 +4,7 @@
 #include <optional>
 #include <vector>
 #include <iomanip>
+#include <memory>
 
 #include "win_condition_strategy.h"
 #include "player.h"
