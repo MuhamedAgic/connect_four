@@ -1,0 +1,23 @@
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  image: rust:latest
+  script:
+    - cargo build --verbose
+
+coverage:
+  stage: test
+  image: rust:latest
+  script:
+    - cargo install cargo-llvm-cov
+    - cargo llvm-cov --cobertura --output-path coverage.xml
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+
+

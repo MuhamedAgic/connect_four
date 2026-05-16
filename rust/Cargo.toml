@@ -1,8 +1,10 @@
-[package]
-name = "connect_four_rs"
-version = "0.1.0"
-edition = "2024"
+[workspace]
+resolver = "3"
 
-[dependencies]
-rand = "0.8"
-rayon = "1.11.0"
+members = [
+    "connect_four_core",
+    "connect_four_py",
+    "connect_four_cpp",
+    "connect_four_rs", 
+    "connect_four_ffi"
+]

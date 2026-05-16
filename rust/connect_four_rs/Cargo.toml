@@ -1,0 +1,7 @@
+[package]
+name = "connect_four_rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+connect_four_core = { path = "../connect_four_core" }

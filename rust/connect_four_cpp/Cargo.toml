@@ -1,0 +1,17 @@
+[package]
+name = "connect_four_cpp_rs"
+version = "0.1.0"
+edition = "2024"
+
+
+[lib]
+crate-type = ["staticlib"]
+
+
+[dependencies]
+cxx = "1.0"
+connect_four_core = { path = "../connect_four_core" }
+
+
+[build-dependencies]
+cxx-build = "1.0"

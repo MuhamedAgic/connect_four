@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Build Rust -->
+  <Target Name="BuildRust" BeforeTargets="Build">
+    <Exec Command="cargo build -p connect_four_ffi"
+          WorkingDirectory="..\..\" />
+  </Target>
+
+  <!-- Copy DLL -->
+  <Target Name="CopyRustDll" AfterTargets="Build">
+    <PropertyGroup>
+      <RustDll>..\..\target\debug\connect_four_ffi.dll</RustDll>
+      <DestDir>$(OutDir)</DestDir>
+    </PropertyGroup>
+
+    <Message Text="Copying Rust DLL from $(RustDll)" />
+
+    <Copy SourceFiles="$(RustDll)"
+          DestinationFolder="$(DestDir)"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

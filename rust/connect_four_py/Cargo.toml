@@ -1,0 +1,15 @@
+[package]
+name = "connect_four_py"
+version = "0.1.0"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "connect_four_py"
+crate-type = ["cdylib"]
+
+
+[dependencies]
+pyo3 = { version = "0.28", features = ["extension-module"] }
+connect_four_core = { path = "../connect_four_core" }
+

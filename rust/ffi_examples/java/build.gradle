@@ -1,0 +1,91 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.github.jnr:jnr-ffi:2.2.17'
+}
+
+application {
+    mainClass = 'com.example.Main'
+}
+
+/*
+ * -----------------------------
+ * PATHS (IMPORTANT FIX)
+ * -----------------------------
+ */
+
+// workspace root (where Cargo.toml is)
+def rustRoot = file("../../")
+
+def nativeDir = file("$projectDir/native")
+
+def buildProfile = project.hasProperty("release") ? "release" : "debug"
+
+/*
+ * -----------------------------
+ * RUST BUILD
+ * -----------------------------
+ */
+tasks.register("buildRust", Exec) {
+    workingDir rustRoot
+
+    def isRelease = project.hasProperty("release")
+
+    commandLine = isRelease
+            ? ["cargo", "build", "-p", "connect_four_ffi", "--release"]
+            : ["cargo", "build", "-p", "connect_four_ffi"]
+
+    doFirst {
+        println "Building ONLY connect_four_ffi (${isRelease ? "release" : "debug"})"
+    }
+}
+
+/*
+ * -----------------------------
+ * COPY NATIVE LIB
+ * -----------------------------
+ */
+tasks.register("copyNativeLib") {
+    dependsOn "buildRust"
+
+    doLast {
+        nativeDir.mkdirs()
+
+        def libName = System.properties['os.name'].toLowerCase().contains("windows")
+                ? "connect_four_ffi.dll"
+                : "libconnect_four_ffi.so"
+
+        def src = file("${rustRoot}/target/${buildProfile}/${libName}")
+
+        println "Looking for: " + src
+
+        if (!src.exists()) {
+            throw new GradleException("Rust library not found: " + src)
+        }
+
+        copy {
+            from src
+            into nativeDir
+        }
+    }
+}
+
+/*
+ * -----------------------------
+ * RUN
+ * -----------------------------
+ */
+tasks.named("run") {
+    dependsOn "copyNativeLib"
+
+    jvmArgs = ["-Djava.library.path=native"]
+
+    standardInput = System.in
+}
